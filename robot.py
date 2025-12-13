@@ -71,3 +71,8 @@ class Robot:
             self.robot.send_action(action)
 
         print("Episode finished! Starting new episode...")
+
+
+if __name__ == "__main__":
+    robot = Robot()
+    robot.run("feed")
