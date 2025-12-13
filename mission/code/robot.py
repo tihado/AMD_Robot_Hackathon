@@ -4,19 +4,24 @@ from lerobot.datasets.utils import hw_to_dataset_features
 from lerobot.policies.factory import make_pre_post_processors
 from lerobot.policies.utils import build_inference_frame, make_robot_action
 from lerobot.policies.smolvla.modeling_smolvla import SmolVLAPolicy
+from lerobot.policies.act.modeling_act import ACTPolicy
 import torch
 from time import sleep
 from pathlib import Path
 import time
+from typing import Literal
+import subprocess
 
 
 class Robot:
-    def __init__(self, dummy=False):
+    def __init__(self, dummy=False, use_command=False):
         if dummy:
             self.dummy = True
             return
         else:
             self.dummy = False
+
+        self.use_command = use_command
 
         calibration_dir = ""
 
@@ -30,7 +35,12 @@ class Robot:
         self.robot_port = "/dev/ttyACM1"
 
         self.device = torch.device("cuda")  # or "cuda" or "cpu"
-        self.model_id = "lerobot/smolvla_base"
+        self.model_id = "tiena2cva/tihado_mission_3"
+        self.model_type = "smolvla"  # or "act"
+
+        self.task_mapping = {
+            "feed": "pickup carrot and feed",
+        }
 
         self.robot_cfg = SO101FollowerConfig(
             port=self.robot_port,
@@ -52,7 +62,12 @@ class Robot:
         )
         self.dataset_features = {**self.action_features, **self.obs_features}
 
-        self.model = SmolVLAPolicy.from_pretrained(self.model_id)
+        if self.model_type == "smolvla":
+            self.model = SmolVLAPolicy.from_pretrained(self.model_id)
+        elif self.model_type == "act":
+            self.model = ACTPolicy.from_pretrained(self.model_id)
+        else:
+            raise ValueError(f"Invalid model type: {self.model_type}")
 
         self.preprocess, self.postprocess = make_pre_post_processors(
             self.model.config,
@@ -61,10 +76,22 @@ class Robot:
             preprocessor_overrides={"device_processor": {"device": str(self.device)}},
         )
 
-    def run(self, task):
+    def run(self, task: Literal["feed"]):
         if self.dummy:
             print("Dummy mode: No action will be sent to the robot")
             sleep(5000)
+            return
+
+        task_description = self.task_mapping[task]
+        if not task_description:
+            print(f"Invalid task: {task}")
+
+            return
+
+        if self.use_command:
+            # use subprocess to run the command and wait for it to finish
+            subprocess.run(["bash", "run_task.sh", task], check=True)
+            print("Task finished! Starting new task...")
             return
 
         start_time = time.time()
