@@ -11,4 +11,5 @@ dependencies = [
     "pyaudio>=0.2.14",
     "python-dotenv>=1.2.1",
     "speechrecognition>=3.14.4",
+    "torchcodec>=0.5",
 ]

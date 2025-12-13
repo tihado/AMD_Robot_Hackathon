@@ -2780,6 +2780,7 @@ dependencies = [
     { name = "pyaudio" },
     { name = "python-dotenv" },
     { name = "speechrecognition" },
+    { name = "torchcodec" },
 ]
 
 [package.metadata]
@@ -2790,6 +2791,7 @@ requires-dist = [
     { name = "pyaudio", specifier = ">=0.2.14" },
     { name = "python-dotenv", specifier = ">=1.2.1" },
     { name = "speechrecognition", specifier = ">=3.14.4" },
+    { name = "torchcodec", specifier = ">=0.5" },
 ]
 
 [[package]]
