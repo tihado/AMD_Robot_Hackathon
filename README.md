@@ -74,9 +74,9 @@ Special thanks to:
 
 ## 📬 Contributors
 
-- 🐮 Hồng Hạnh - [@honghanhh](https://github.com/honghanhh)
-- 🐔 Việt Tiến - [@nvti](https://github.com/nvti)
-- 🐻 Nhật Linh - [@Nlag](https://github.com/NLag)
-- 🐰 Phương Nhi - [@pnhneeechuu](https://github.com/pnhneeechuu)
+- 🐍 Hồng Hạnh - [@honghanhh](https://github.com/honghanhh)
+- 🐍 Việt Tiến - [@nvti](https://github.com/nvti)
+- 🐍 Nhật Linh - [@Nlag](https://github.com/NLag)
+- 🐍 Phương Nhi - [@pnhneeechuu](https://github.com/pnhneeechuu)
 
 ---
