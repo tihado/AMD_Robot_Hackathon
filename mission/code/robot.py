@@ -86,6 +86,8 @@ class Robot:
             preprocessor_overrides={"device_processor": {"device": str(self.device)}},
         )
 
+        self.action_diff_queue = []
+
     def run(self, task: Literal["feed"]):
         if self.dummy:
             print("Dummy mode: No action will be sent to the robot")
@@ -105,12 +107,9 @@ class Robot:
             return
 
         start_time = time.time()
-        # Threshold for considering an action as "no action" (all values close to zero)
-        ACTION_THRESHOLD = 1e-6
 
         last_action = None
-        last_movement_time = time.time()  # Track when robot last moved
-        NO_MOVEMENT_TIMEOUT = 5.0  # Break if no movement for 5 seconds
+        self.action_diff_queue = []
 
         while True:
             if time.time() - start_time > self.MAX_STEPS_SECONDS:
@@ -131,16 +130,12 @@ class Robot:
             action = self.postprocess(action)
             action = make_robot_action(action, self.dataset_features)
 
-            if self.is_robot_move(last_action, action, 2):
-                # Robot moved, update last movement time
-                last_movement_time = time.time()
-            else:
-                # Check if 5 seconds have passed without movement
-                if time.time() - last_movement_time > NO_MOVEMENT_TIMEOUT:
-                    print(
-                        f"No movement detected for {NO_MOVEMENT_TIMEOUT} seconds. Breaking loop."
-                    )
-                    break
+            # Check if robot is moving
+            is_moving = self.is_robot_move(last_action, action, 1e-6)
+
+            if not is_moving:
+                print(f"No movement detected in 50 steps. Breaking loop.")
+                break
 
             self.robot.send_action(action)
             last_action = action
@@ -150,16 +145,33 @@ class Robot:
     def is_robot_move(
         self, last_action: dict | None, action: dict, action_threshold: float = 1e-6
     ) -> bool:
+        """
+        Check if robot is moving by comparing current action with last action.
+        Uses a rolling average over the last 50 steps to smooth out noise.
+        Returns True if robot is moving, False otherwise.
+        """
         if last_action is None:
-            return True
+            return True  # First iteration, assume moving
 
         sum_difference = 0
         # compare every value in the action dictionary
         for key, value in action.items():
             sum_difference += abs(last_action[key] - value)
 
-        print(f"Sum difference: {sum_difference}")
-        return sum_difference > action_threshold
+        self.action_diff_queue.append(sum_difference)
+
+        # Need at least 50 samples before making a decision
+        if len(self.action_diff_queue) < 50:
+            return True  # Assume moving during warm-up period
+
+        # Check if average movement over last 50 steps exceeds threshold
+        avg_difference = sum(self.action_diff_queue) / len(self.action_diff_queue)
+        is_moving = avg_difference > action_threshold
+
+        # Maintain queue size at 50 (remove oldest element)
+        self.action_diff_queue.pop(0)
+
+        return is_moving
 
 
 if __name__ == "__main__":
