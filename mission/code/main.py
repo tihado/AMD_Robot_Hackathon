@@ -10,30 +10,30 @@ def main():
     assistant.speak("Hello! How can I assist you today?")
     while True:
         command = assistant.listen()
-        if "exit" in command or "quit" in command or "goodbye" in command:
-            assistant.speak("Goodbye!")
+
+        # Use OpenAI for response
+        response = assistant.ask_openai(command)
+        print(f"Assistant: {response}")
+
+        if response.action == "bye":
+            print("Bye bye!")
             break
-        elif command:
-            # Use OpenAI for response
-            response = assistant.ask_openai(command)
 
-            print(f"Assistant: {response}")
+        if response.action == "feed":
+            # Run speak and robot.run in parallel
+            speak_thread = threading.Thread(
+                target=assistant.speak, args=(response.response_text,)
+            )
+            robot_thread = threading.Thread(target=robot.run, args=("feed",))
 
-            if response.action == "feed":
-                # Run speak and robot.run in parallel
-                speak_thread = threading.Thread(
-                    target=assistant.speak, args=(response.response_text,)
-                )
-                robot_thread = threading.Thread(target=robot.run, args=("feed",))
+            speak_thread.start()
+            robot_thread.start()
 
-                speak_thread.start()
-                robot_thread.start()
-
-                # Wait for both threads to complete
-                speak_thread.join()
-                robot_thread.join()
-            else:
-                assistant.speak(response.response_text)
+            # Wait for both threads to complete
+            speak_thread.join()
+            robot_thread.join()
+        else:
+            assistant.speak(response.response_text)
 
 
 if __name__ == "__main__":
