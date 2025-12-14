@@ -7,6 +7,7 @@ from elevenlabs.play import play
 from typing import Literal
 from pydantic import BaseModel
 from elevenlabs.types.voice_settings import VoiceSettings
+from datetime import datetime
 
 load_dotenv()
 
@@ -27,6 +28,10 @@ class VoiceAssistant:
 
         self.voice_id = "kdmDKE6EkgrWrrykO9Qt"
         self.voice_model_id = "eleven_multilingual_v2"
+
+        self.audio_output_dir = "audio_recordings"
+        if self.audio_output_dir:
+            os.makedirs(self.audio_output_dir, exist_ok=True)
 
         self.recognizer = sr.Recognizer()
 
@@ -50,10 +55,21 @@ class VoiceAssistant:
     def listen(self):
         with sr.Microphone() as source:
             print("Listening...")
-            audio = self.recognizer.listen(source)
+            audio = self.recognizer.listen(source, timeout=50, phrase_time_limit=10)
         try:
             query = self.recognizer.recognize_google(audio)
             print(f"You said: {query}")
+
+            # Save audio to file
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            audio_filename = os.path.join(
+                self.audio_output_dir, f"recording_{timestamp}.wav"
+            )
+
+            with open(audio_filename, "wb") as f:
+                f.write(audio.get_wav_data())
+            print(f"Audio saved to: {audio_filename}")
+
             return query
         except sr.UnknownValueError:
             print("Sorry, I didn't catch that.")
