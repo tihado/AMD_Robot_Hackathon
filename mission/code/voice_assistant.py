@@ -30,8 +30,9 @@ class VoiceAssistant:
         self.voice_id = "kdmDKE6EkgrWrrykO9Qt"
         self.voice_model_id = "eleven_multilingual_v2"
 
-        self.audio_output_dir = "audio_recordings"
-        if self.audio_output_dir:
+        self.audio_output_dir = ""
+
+        if self.audio_output_dir and self.audio_output_dir != "":
             os.makedirs(self.audio_output_dir, exist_ok=True)
 
         self.recognizer = sr.Recognizer()
