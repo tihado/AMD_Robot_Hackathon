@@ -1,0 +1,15 @@
+lerobot-record \
+    --robot.type=so101_follower \
+    --robot.port=/dev/ttyACM1 \
+    --robot.id=tihado_follower \
+    --robot.cameras="{front: {type: opencv, index_or_path: 2, width: 640, height: 480, fps: 30}, top: {type: opencv, index_or_path: 4, width: 640, height: 480, fps: 30}, side: {type: opencv, index_or_path: 6, width: 640, height: 480, fps: 30}}" \
+    --teleop.type=so101_leader \
+    --teleop.port=/dev/ttyACM0 \
+    --teleop.id=tihado_leader \
+    --dataset.repo_id="tiena2cva/tihado_mission_4" \
+    --dataset.num_episodes=20 \
+    --dataset.episode_time_s=30 \
+    --dataset.reset_time_s=10 \
+    --dataset.single_task="pickup the carrot and feed" \
+    --dataset.root=/home/tihado/tihado-team13/so101_food_4/ \
+    --display_data=true

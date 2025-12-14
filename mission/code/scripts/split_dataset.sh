@@ -1,0 +1,1 @@
+lerobot-edit-dataset --root /home/tihado/so101_food --repo_id tiena2cva/tihado_mission_1 --operation.type split --operation.splits '{"train": 0.6, "test": 0.2, "val": 0.2}' --push_to_hub true

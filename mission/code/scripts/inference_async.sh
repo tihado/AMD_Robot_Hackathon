@@ -1,0 +1,14 @@
+python -m lerobot.async_inference.robot_client \
+    --server_address=127.0.0.1:8080 \
+    --robot.type=so101_follower \
+    --robot.port=/dev/ttyACM1 \
+    --robot.id=tihado_follower \
+    --robot.cameras="{camera1: {type: opencv, index_or_path: 8, width: 640, height: 480, fps: 30}, camera2: {type: opencv, index_or_path: 2, width: 640, height: 480, fps: 30}, camera3: {type: opencv, index_or_path: 4, width: 640, height: 480, fps: 30}}" \
+    --task="pickup the meat and feed" \
+    --policy_type=smolvla \
+    --pretrained_name_or_path=tiena2cva/tihado_mission_1 \
+    --policy_device=cuda \
+    --actions_per_chunk=10 \
+    --chunk_size_threshold=0.5 \
+    --aggregate_fn_name=weighted_average \
+    --debug_visualize_queue_size=true 
