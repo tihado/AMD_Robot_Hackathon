@@ -124,12 +124,13 @@ class Robot:
             obs = self.preprocess(obs_frame)
 
             action = self.model.select_action(obs)
+            print(f"Selection action: {action}")
             action = self.postprocess(action)
             action = make_robot_action(action, self.dataset_features)
+            print(f"Robot action: {action}")
 
             # Check if there are no meaningful actions (all values are effectively zero)
             action_magnitude = sum(abs(v) for v in action.values())
-            print(f"Action magnitude: {action_magnitude}")
             if action_magnitude < ACTION_THRESHOLD:
                 print(
                     "No action detected - task may be complete. Breaking loop.",
