@@ -4,7 +4,7 @@ import threading
 
 
 def main():
-    assistant = VoiceAssistant(speak_enabled=False)
+    assistant = VoiceAssistant(speak_enabled=True)
     robot = Robot(dummy=False)
 
     assistant.speak("Hello! How can I assist you today?")

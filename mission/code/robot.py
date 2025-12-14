@@ -164,15 +164,15 @@ class Robot:
 
         self.action_diff_queue.append(sum_difference)
 
-        # Need at least 50 samples before making a decision
+        # Need at least action_diff_queue_size samples before making a decision
         if len(self.action_diff_queue) < self.action_diff_queue_size:
             return True  # Assume moving during warm-up period
 
-        # Check if average movement over last 50 steps exceeds threshold
+        # Check if average movement over last action_diff_queue_size steps exceeds threshold
         avg_difference = sum(self.action_diff_queue) / len(self.action_diff_queue)
         is_moving = avg_difference > self.action_diff_threshold
 
-        # Maintain queue size at 50 (remove oldest element)
+        # Maintain queue size at action_diff_queue_size (remove oldest element)
         self.action_diff_queue.pop(0)
 
         return is_moving
