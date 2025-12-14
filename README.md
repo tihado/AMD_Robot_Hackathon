@@ -160,7 +160,8 @@ Some our training experiments: [Training Experiments](./mission/training/README.
 1. **Voice Input:** User speaks natural language command (e.g., "I want to eat carrots")
 2. **Speech Recognition:** Google Speech Recognition API converts audio to text
 3. **Intent Understanding:** OpenAI GPT-4o-mini with structured output parsing determines action intent
-4. **Task Execution:** Robot receives task instruction ("feed") and:
+4. **Voice Feedback:** ElevenLabs voice model provides natural voice responses to user interactions
+5. **Task Execution:** Robot receives task instruction ("feed") and:
 
    - Captures multi-view observations from cameras
    - Builds inference frame with task context
@@ -204,6 +205,7 @@ Details of inference code: [robot.py](./mission/code/robot.py)
 
   - **Speech Recognition:** Google Speech Recognition API converts spoken audio to text
   - **Intent Understanding:** OpenAI GPT-4o-mini with structured output parsing interprets user intent and extracts actionable commands
+  - **Voice Feedback:** ElevenLabs voice model provides natural voice responses to user interactions
   - **Natural Language Flexibility:** Users can express requests in various ways without memorizing specific commands
     - Feeding requests: "I want to eat carrots", "feed me", "I'm hungry", "can you feed me?", "I want to eat beef", "I feel like eating vegetables"
     - General conversation: Questions about menu, casual chat, inquiries about capabilities
