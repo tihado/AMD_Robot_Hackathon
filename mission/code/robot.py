@@ -21,26 +21,28 @@ class Robot:
         else:
             self.dummy = False
 
-        self.use_command = use_command
+        self.task_mapping = {
+            "feed": "pickup carrot and feed",
+        }
 
-        calibration_dir = ""
+        self.use_command = use_command
+        if self.use_command:
+            return 
+
+        calibration_dir = "/home/tihado/.cache/huggingface/lerobot/calibration/robots/so101_follower"
 
         self.camera_cfg = {
-            "top": OpenCVCameraConfig(index_or_path=2, width=640, height=480, fps=30),
-            "side": OpenCVCameraConfig(index_or_path=4, width=640, height=480, fps=30),
-            "up": OpenCVCameraConfig(index_or_path=6, width=640, height=480, fps=30),
+            "camera3": OpenCVCameraConfig(index_or_path=2, width=640, height=480, fps=30), # front
+            "camera1": OpenCVCameraConfig(index_or_path=4, width=640, height=480, fps=30), # top
+            "camera2": OpenCVCameraConfig(index_or_path=6, width=640, height=480, fps=30), # side
         }
 
         self.robot_id = "tihado_follower"
         self.robot_port = "/dev/ttyACM1"
 
         self.device = torch.device("cuda")  # or "cuda" or "cpu"
-        self.model_id = "tiena2cva/tihado_mission_3"
+        self.model_id = "tiena2cva/tihado_model_3"
         self.model_type = "smolvla"  # or "act"
-
-        self.task_mapping = {
-            "feed": "pickup carrot and feed",
-        }
 
         self.robot_cfg = SO101FollowerConfig(
             port=self.robot_port,
@@ -90,7 +92,7 @@ class Robot:
 
         if self.use_command:
             # use subprocess to run the command and wait for it to finish
-            subprocess.run(["bash", "run_task.sh", task], check=True)
+            subprocess.run(["bash", "run_task.sh", task_description], check=True)
             print("Task finished! Starting new task...")
             return
 
@@ -107,7 +109,7 @@ class Robot:
                 observation=obs,
                 ds_features=self.dataset_features,
                 device=self.device,
-                task=task,
+                task=task_description,
                 robot_type=self.robot_type,
             )
 
@@ -129,5 +131,5 @@ class Robot:
 
 
 if __name__ == "__main__":
-    robot = Robot()
+    robot = Robot(use_command=False)
     robot.run("feed")

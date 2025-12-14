@@ -102,5 +102,5 @@ Response guidelines:
 
 
 if __name__ == "__main__":
-    voice_assistant = VoiceAssistant()
+    voice_assistant = VoiceAssistant(speak_enabled=False)
     voice_assistant.assistant()

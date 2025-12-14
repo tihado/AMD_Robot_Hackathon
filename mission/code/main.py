@@ -4,7 +4,7 @@ from robot import Robot
 
 def main():
     assistant = VoiceAssistant(speak_enabled=False)
-    robot = Robot(dummy=True)
+    robot = Robot(dummy=False)
 
     assistant.speak("Hello! How can I assist you today?")
     while True:
