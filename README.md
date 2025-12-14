@@ -1,6 +1,7 @@
 # AMD_Robotics_Hackathon_2025_Tihado
 
 ## Team Information
+**Winner: 3rd prize 🥉🥉🥉🍾🍾🍾**
 
 **Team:** 13 - Tihado Team
 
