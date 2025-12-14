@@ -25,7 +25,7 @@ For example:
 
 This project started with feeding, but the long-term vision is broader: **Creating a world where disability does not limit autonomy.**
 
-[🎥 Watch the demo video](#)
+[🎥 Watch the demo video](https://youtu.be/Mj4wDKEM4vM)
 
 ---
 
