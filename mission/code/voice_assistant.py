@@ -38,6 +38,11 @@ class VoiceAssistant:
 
         self.speak_enabled = speak_enabled
 
+        # Adjust for ambient noise
+        with sr.Microphone() as source:
+            print("Listening...")
+            self.recognizer.adjust_for_ambient_noise(source, 1)
+
     def speak(self, text):
         print(f"Assistant: {text}")
         if self.speak_enabled:
@@ -62,7 +67,7 @@ class VoiceAssistant:
     def listen(self):
         with sr.Microphone() as source:
             print("Listening...")
-            audio = self.recognizer.listen(source, timeout=50, phrase_time_limit=10)
+            audio = self.recognizer.listen(source, timeout=50, phrase_time_limit=20)
         try:
             query = self.recognizer.recognize_google(audio)
             print(f"You said: {query}")
@@ -186,7 +191,8 @@ Response guidelines:
 
 
 if __name__ == "__main__":
-    voice_assistant = VoiceAssistant(speak_enabled=True)
+    voice_assistant = VoiceAssistant(speak_enabled=False)
+
     response = voice_assistant.ask_openai("Hello! What's the menu today?")
     voice_assistant.speak(response.response_text)
     print(f"Assistant: {response}")
