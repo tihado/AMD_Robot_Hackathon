@@ -108,6 +108,8 @@ class Robot:
         # Threshold for considering an action as "no action" (all values close to zero)
         ACTION_THRESHOLD = 1e-6
 
+        last_action = None
+
         while True:
             if time.time() - start_time > self.MAX_STEPS_SECONDS:
                 break
@@ -124,14 +126,10 @@ class Robot:
             obs = self.preprocess(obs_frame)
 
             action = self.model.select_action(obs)
-            print(f"Selection action: {action}")
             action = self.postprocess(action)
             action = make_robot_action(action, self.dataset_features)
-            print(f"Robot action: {action}")
 
-            # Check if there are no meaningful actions (all values are effectively zero)
-            action_magnitude = sum(abs(v) for v in action.values())
-            if action_magnitude < ACTION_THRESHOLD:
+            if not self.is_robot_move(last_action, action):
                 print(
                     "No action detected - task may be complete. Breaking loop.",
                     time.time(),
@@ -140,6 +138,20 @@ class Robot:
             self.robot.send_action(action)
 
         print("Task finished! Starting new task...")
+
+    def is_robot_move(
+        self, last_action: dict | None, action: dict, action_threshold: float = 1e-6
+    ) -> bool:
+        if last_action is None:
+            return True
+
+        sum_difference = 0
+        # compare every value in the action dictionary
+        for key, value in action.items():
+            sum_difference += abs(last_action[key] - value)
+
+        print(f"Sum difference: {sum_difference}")
+        return sum_difference > action_threshold
 
 
 if __name__ == "__main__":
