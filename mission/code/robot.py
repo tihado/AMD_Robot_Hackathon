@@ -59,7 +59,8 @@ class Robot:
             calibration_dir=Path(calibration_dir),
         )
 
-        self.MAX_STEPS_SECONDS = 30
+        self.MAX_STEPS_SECONDS = 45
+        self.MIN_STEPS_SECONDS = 10
 
         self.robot = SO101Follower(self.robot_cfg)
         self.robot.connect(calibrate=False)
@@ -136,7 +137,7 @@ class Robot:
             # Check if robot is moving
             is_moving = self.is_robot_move(last_action, action)
 
-            if not is_moving:
+            if not is_moving and time.time() - start_time > self.MIN_STEPS_SECONDS:
                 print(
                     f"No movement detected in {self.action_diff_queue_size} steps. Breaking loop."
                 )
