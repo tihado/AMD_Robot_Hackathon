@@ -27,14 +27,22 @@ class Robot:
 
         self.use_command = use_command
         if self.use_command:
-            return 
+            return
 
-        calibration_dir = "/home/tihado/.cache/huggingface/lerobot/calibration/robots/so101_follower"
+        calibration_dir = (
+            "/home/tihado/.cache/huggingface/lerobot/calibration/robots/so101_follower"
+        )
 
         self.camera_cfg = {
-            "camera3": OpenCVCameraConfig(index_or_path=2, width=640, height=480, fps=30), # front
-            "camera1": OpenCVCameraConfig(index_or_path=4, width=640, height=480, fps=30), # top
-            "camera2": OpenCVCameraConfig(index_or_path=6, width=640, height=480, fps=30), # side
+            "camera3": OpenCVCameraConfig(
+                index_or_path=2, width=640, height=480, fps=30
+            ),  # front
+            "camera1": OpenCVCameraConfig(
+                index_or_path=4, width=640, height=480, fps=30
+            ),  # top
+            "camera2": OpenCVCameraConfig(
+                index_or_path=6, width=640, height=480, fps=30
+            ),  # side
         }
 
         self.robot_id = "tihado_follower"
@@ -121,9 +129,12 @@ class Robot:
 
             # Check if there are no meaningful actions (all values are effectively zero)
             action_magnitude = sum(abs(v) for v in action.values())
+            print(f"Action magnitude: {action_magnitude}")
             if action_magnitude < ACTION_THRESHOLD:
-                print("No action detected - task may be complete. Breaking loop.")
-                break
+                print(
+                    "No action detected - task may be complete. Breaking loop.",
+                    time.time(),
+                )
 
             self.robot.send_action(action)
 
