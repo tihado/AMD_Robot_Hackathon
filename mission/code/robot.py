@@ -49,7 +49,7 @@ class Robot:
         self.robot_port = "/dev/ttyACM1"
 
         self.device = torch.device("cuda")  # or "cuda" or "cpu"
-        self.model_id = "tiena2cva/tihado_model_3"
+        self.model_id = "tiena2cva/tihado_model_3.1"
         self.model_type = "smolvla"  # or "act"
 
         self.robot_cfg = SO101FollowerConfig(
