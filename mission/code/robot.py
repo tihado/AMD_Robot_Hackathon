@@ -86,7 +86,10 @@ class Robot:
             preprocessor_overrides={"device_processor": {"device": str(self.device)}},
         )
 
+        # For checking if the robot is moving
         self.action_diff_queue = []
+        self.action_diff_threshold = 1.5
+        self.action_diff_queue_size = 50
 
     def run(self, task: Literal["feed"]):
         if self.dummy:
@@ -131,10 +134,12 @@ class Robot:
             action = make_robot_action(action, self.dataset_features)
 
             # Check if robot is moving
-            is_moving = self.is_robot_move(last_action, action, 1e-6)
+            is_moving = self.is_robot_move(last_action, action)
 
             if not is_moving:
-                print(f"No movement detected in 50 steps. Breaking loop.")
+                print(
+                    f"No movement detected in {self.action_diff_queue_size} steps. Breaking loop."
+                )
                 break
 
             self.robot.send_action(action)
@@ -142,9 +147,7 @@ class Robot:
 
         print("Task finished! Starting new task...")
 
-    def is_robot_move(
-        self, last_action: dict | None, action: dict, action_threshold: float = 1e-6
-    ) -> bool:
+    def is_robot_move(self, last_action: dict | None, action: dict) -> bool:
         """
         Check if robot is moving by comparing current action with last action.
         Uses a rolling average over the last 50 steps to smooth out noise.
@@ -161,12 +164,14 @@ class Robot:
         self.action_diff_queue.append(sum_difference)
 
         # Need at least 50 samples before making a decision
-        if len(self.action_diff_queue) < 50:
+        if len(self.action_diff_queue) < self.action_diff_queue_size:
             return True  # Assume moving during warm-up period
 
         # Check if average movement over last 50 steps exceeds threshold
         avg_difference = sum(self.action_diff_queue) / len(self.action_diff_queue)
-        is_moving = avg_difference > action_threshold
+        is_moving = avg_difference > self.action_diff_threshold
+
+        print(f"Average difference: {avg_difference}")
 
         # Maintain queue size at 50 (remove oldest element)
         self.action_diff_queue.pop(0)
