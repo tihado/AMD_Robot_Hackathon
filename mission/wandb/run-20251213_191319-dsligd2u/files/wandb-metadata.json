@@ -1,0 +1,51 @@
+{
+  "os":  "Linux-6.1.0-39-amd64-x86_64-with-glibc2.39",
+  "python":  "CPython 3.12.3",
+  "startedAt":  "2025-12-13T19:13:19.883028Z",
+  "args":  [
+    "--dataset.repo_id=tiena2cva/tihado_mission_3",
+    "--batch_size=64",
+    "--steps=20000",
+    "--output_dir=outputs/train/pick_carrot",
+    "--job_name=pick_carrot",
+    "--policy.path=lerobot/smolvla_base",
+    "--policy.repo_id=tiena2cva/tihado_model_3",
+    "--policy.device=cuda",
+    "--policy.push_to_hub=true",
+    "--wandb.enable=true",
+    "--rename_map={\"observation.images.top\":\"observation.images.camera1\", \"observation.images.side\":\"observation.images.camera2\", \"observation.images.front\":\"observation.images.camera3\"}"
+  ],
+  "program":  "/opt/venv/bin/lerobot-train",
+  "root":  "outputs/train/pick_carrot",
+  "host":  "robotics-jupyter-launcher-7126",
+  "executable":  "/opt/venv/bin/python",
+  "cpu_count":  160,
+  "cpu_count_logical":  160,
+  "gpu":  "AMD Instinct MI300X VF",
+  "gpu_count":  1,
+  "disk":  {
+    "/":  {
+      "total":  "2162185003008",
+      "used":  "469987479552"
+    }
+  },
+  "memory":  {
+    "total":  "2029207171072"
+  },
+  "gpu_amd":  [
+    {
+      "id":  "0",
+      "uniqueId":  "0x861906b871dae992",
+      "vbiosVersion":  "113-M3000100-103",
+      "performanceLevel":  "auto",
+      "maxPower":  "750.0",
+      "series":  "AMD Instinct MI300X VF",
+      "model":  "0x74b5",
+      "vendor":  "Advanced Micro Devices, Inc. [AMD/ATI]",
+      "sku":  "M3000100",
+      "sclkRange":  "500Mhz - 2100Mhz",
+      "mclkRange":  "900Mhz - 1300Mhz"
+    }
+  ],
+  "writerId":  "v0uohybax62jws7d40fta1l4jn8se319"
+}
