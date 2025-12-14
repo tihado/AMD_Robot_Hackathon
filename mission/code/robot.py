@@ -109,6 +109,8 @@ class Robot:
         ACTION_THRESHOLD = 1e-6
 
         last_action = None
+        last_movement_time = time.time()  # Track when robot last moved
+        NO_MOVEMENT_TIMEOUT = 5.0  # Break if no movement for 5 seconds
 
         while True:
             if time.time() - start_time > self.MAX_STEPS_SECONDS:
@@ -129,13 +131,19 @@ class Robot:
             action = self.postprocess(action)
             action = make_robot_action(action, self.dataset_features)
 
-            if not self.is_robot_move(last_action, action):
-                print(
-                    "No action detected - task may be complete. Breaking loop.",
-                    time.time(),
-                )
+            if self.is_robot_move(last_action, action, 2):
+                # Robot moved, update last movement time
+                last_movement_time = time.time()
+            else:
+                # Check if 5 seconds have passed without movement
+                if time.time() - last_movement_time > NO_MOVEMENT_TIMEOUT:
+                    print(
+                        f"No movement detected for {NO_MOVEMENT_TIMEOUT} seconds. Breaking loop."
+                    )
+                    break
 
             self.robot.send_action(action)
+            last_action = action
 
         print("Task finished! Starting new task...")
 
