@@ -113,7 +113,7 @@ For more details, please refer to the [dataset capture README](./mission/data/RE
 
 All training was done on an AMD Instinct™ MI300X GPU on AMD Developer Cloud.
 
-![Training Results](./training_result.png)
+![Training Results](./mission/training/smolvla-result.png)
 
 We trained the model for **40,000** steps with a batch size of 64. The total training time was approximately **8 hours**.
 
@@ -145,6 +145,8 @@ lerobot-train \
   --wandb.enable=true \
   --rename_map='{"observation.images.top":"observation.images.camera1", "observation.images.side":"observation.images.camera2", "observation.images.front":"observation.images.camera3"}'
 ```
+
+Some our training experiments: [Training Experiments](./mission/training/README.md)
 
 ### Inference
 
