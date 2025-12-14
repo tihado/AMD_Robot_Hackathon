@@ -84,9 +84,9 @@ EatAble learns from **teleoperated demonstrations**, capturing natural human mov
 
 ---
 
-### 3. Technical implementations
+## 3. Technical implementations
 
-#### Teleoperation / Dataset capture
+### Teleoperation / Dataset capture
 
 ![Dataset Visualization](./mission/data/dataset.png)
 
@@ -107,7 +107,7 @@ We use **3 cameras** positioned at different angles to provide comprehensive vis
 
 For more details, please refer to the [dataset capture README](./mission/data/README.md).
 
-#### Training
+### Training
 
 **Approach:** The project utilizes the pre-trained `lerobot/smolvla_base` model, which was trained on teleoperated demonstrations. The SmolVLA model combines vision-language understanding with robotic control, enabling it to follow natural language instructions for manipulation tasks.
 
@@ -146,7 +146,7 @@ lerobot-train \
   --rename_map='{"observation.images.top":"observation.images.camera1", "observation.images.side":"observation.images.camera2", "observation.images.front":"observation.images.camera3"}'
 ```
 
-#### Inference
+### Inference
 
 **Inference Pipeline:**
 
@@ -173,14 +173,14 @@ Details of inference code: [robot.py](./mission/code/robot.py)
 
 **Hardware Configuration:**
 
-- **Device:** CUDA-enabled GPU (AMD Instinct™ MI300X or compatible)
+- **Device:** CUDA-enabled GPU
 - **Robot Port:** `/dev/ttyACM1`
 - **Robot ID:** `tihado_follower`
 - **Max Task Duration:** 45 seconds per task
 
 ---
 
-### 4. Ease of use
+## 4. Ease of use
 
 **How generalizable is your implementation across tasks or environments?**
 
@@ -238,7 +238,7 @@ Details of inference code: [robot.py](./mission/code/robot.py)
 
 ---
 
-## Additional Links
+## 5. Additional Links
 
 <!-- - **Demo Video:** [Link to video of your robot performing the task](#) -->
 
