@@ -95,7 +95,7 @@ We created 2 datasets for training the policy model:
 - **[Dataset 1](https://huggingface.co/datasets/tiena2cva/tihado_mission_3)**:
 
   - This dataset is used to train the policy model for the task of picking up the carrot and feeding it to the user.
-  - Contains 5 episodes
+  - Contains 50 episodes
 
 - **[Dataset 2](https://huggingface.co/datasets/tiena2cva/tihado_mission_2)**:
   - This dataset is used to train the policy model for the task of picking up the meat and feeding it to the user.
@@ -115,7 +115,7 @@ All training was done on an AMD Instinct™ MI300X GPU on AMD Developer Cloud.
 
 ![Training Results](./training_result.png)
 
-We trained the model for **20,000** steps with a batch size of 64. The total training time was approximately **4 hours**.
+We trained the model for **40,000** steps with a batch size of 64. The total training time was approximately **8 hours**.
 
 **Model:** SmolVLA (Small Vision-Language-Action) Policy
 
