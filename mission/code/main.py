@@ -16,6 +16,7 @@ def main():
         print(f"Assistant: {response}")
 
         if response.action == "bye":
+            assistant.speak(response.response_text)
             print("Bye bye!")
             break
 
