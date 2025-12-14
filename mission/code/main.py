@@ -10,6 +10,8 @@ def main():
     assistant.speak("Hello! How can I assist you today?")
     while True:
         command = assistant.listen()
+        if command == "" or not command:
+            continue
 
         # Use OpenAI for response
         response = assistant.ask_openai(command)
