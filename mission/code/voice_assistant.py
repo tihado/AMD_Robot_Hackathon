@@ -4,6 +4,7 @@ import os
 from dotenv import load_dotenv
 from elevenlabs.client import ElevenLabs
 from elevenlabs.play import play
+from elevenlabs import save
 from typing import Literal
 from pydantic import BaseModel
 from elevenlabs.types.voice_settings import VoiceSettings
@@ -50,6 +51,12 @@ class VoiceAssistant:
                 ),
             )
 
+            if self.audio_output_dir:
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                audio_filename = os.path.join(
+                    self.audio_output_dir, f"recording_assistant_{timestamp}.wav"
+                )
+                save(audio, audio_filename)
             play(audio)
 
     def listen(self):
@@ -60,15 +67,16 @@ class VoiceAssistant:
             query = self.recognizer.recognize_google(audio)
             print(f"You said: {query}")
 
-            # Save audio to file
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            audio_filename = os.path.join(
-                self.audio_output_dir, f"recording_{timestamp}.wav"
-            )
+            if self.audio_output_dir:
+                # Save audio to file
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                audio_filename = os.path.join(
+                    self.audio_output_dir, f"recording_user_{timestamp}.wav"
+                )
 
-            with open(audio_filename, "wb") as f:
-                f.write(audio.get_wav_data())
-            print(f"Audio saved to: {audio_filename}")
+                with open(audio_filename, "wb") as f:
+                    f.write(audio.get_wav_data())
+                print(f"Audio saved to: {audio_filename}")
 
             return query
         except sr.UnknownValueError:
