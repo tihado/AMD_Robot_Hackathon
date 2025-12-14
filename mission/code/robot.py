@@ -172,8 +172,6 @@ class Robot:
         avg_difference = sum(self.action_diff_queue) / len(self.action_diff_queue)
         is_moving = avg_difference > self.action_diff_threshold
 
-        print(f"Average difference: {avg_difference}")
-
         # Maintain queue size at 50 (remove oldest element)
         self.action_diff_queue.pop(0)
 

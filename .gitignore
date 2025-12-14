@@ -14,3 +14,6 @@ wheels/
 .DS_Store
 
 outputs
+
+mission/code/audio_recordings
+mission/code/audio
